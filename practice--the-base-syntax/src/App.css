@@ -1,0 +1,16 @@
+.App {
+  text-align: center;
+  font-family: "comic sans ms", sans-serif;
+  background-color: lightgoldenrodyellow;
+  margin: 10px;
+  padding: 15px;
+  height: auto;
+}
+
+html {
+  background: grey;
+}
+
+li {
+  text-align: left;
+}
