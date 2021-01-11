@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
-import Radium, { StyleRoot } from "radium";
-
+// import Radium, { StyleRoot } from "radium";
+import styled from 'styled-components'
 import './App.css';
 import Person from './Person/Person'
 
 // React Hooks
 // collection of functions exposed to you by React that you can use on functional components
-// const app = props => {
-// uses useState to set state instead
-// very useful for setting useState Slices in changing different states
+
+/*
+ * Styled components use real css syntax
+ */
+const StyledButton = styled.button`
+  background-color: ${ props => props.alt ? 'tomato' : '#00FA9A' };
+  font: inherit;
+  border: 1px solid grey;
+  padding: 8px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: ${ props => props.alt ? '#DB7093' : '#98FB98' };
+    color: ${ props => props.alt ? 'purple' : '#FF7F50'};
+}
+`;
+
 
 // traditional React uses class components
 class App extends Component {
@@ -26,12 +40,12 @@ class App extends Component {
    * Person component handlers
    */
   nameChangedHandler = (event, id) => {
-    console.log('changed name');
+    console.log('nameChangedHandler');
 
     // get index of person who matches the id
-    const personIndex = this.state.persons.findIndex( p => {
-      return p.id === id;
-    });
+    const personIndex = this.state.persons.findIndex( p =>
+       p.id === id
+    );
 
     // make new object of the single person
     // (avoiding manipulating the this.state reference)
@@ -52,21 +66,42 @@ class App extends Component {
     this.setState( {persons: persons} );
   }
 
+  deletePersonHandler = (personIndex) => {
+    console.log('deletePersonHandler');
+    // make a new object of the whole this.state.persons list
+    const persons = [...this.state.persons];
+    // remove the person at that index
+    persons.splice(personIndex, 1);
+    // set state
+    this.setState({
+      persons: persons
+    });
+  }
+
+  togglePersonHandler = () => {
+    console.log('togglePersonHandler');
+    // make copy of variable
+    const doesShow = this.state.showPersons;
+    // then set state
+    this.setState({ showPersons: !doesShow });
+  }
+
   render() {
     /*
      * Radium to add CSS pseudo selectors
+     *
+     * const style = {
+     *  backgroundColor: 'aquamarine',
+     *  font: 'inherit',
+     *  border: '10x solid yellow',
+     *  padding: '8px',
+     *  cursor: 'pointer',
+     *  ':hover': {
+     *    backgroundColor: 'skyblue',
+     *    color: 'white'
+     *   }
+     *  };
      */
-    const style = {
-      backgroundColor: 'aquamarine',
-      font: 'inherit',
-      border: '10x solid yellow',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'skyblue',
-        color: 'white'
-      }
-    };
 
     /*
      * Using conditionals to out put components
@@ -90,11 +125,13 @@ class App extends Component {
         </div>
       );
 
-      style.backgroundColor = '#f2493d'
-      style[':hover'] = {
-        backgroundColor: 'palevioletred',
-        color: 'white'
-      }
+      /* Gets taken care of in StyledButton
+       * style.backgroundColor = '#f2493d'
+       * style[':hover'] = {
+       *   backgroundColor: 'palevioletred',
+       *   color: 'white'
+       * }
+       */
     }
 
     /*
@@ -108,50 +145,31 @@ class App extends Component {
       classList.push('bold');
     }
     let classes = classList.join(' ');
-    console.log(`classes: ${classes}`);
 
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>hi I'm a react app :3</h1>
-          <p className={classes}>Yay this works</p>
+      <div className="App">
+        <h1>hi I'm a react app :3</h1>
+        <p className={classes}>Yay this works</p>
 
-          <button
-            style={style}
-            onClick={this.togglePersonHandler}>
-            Toggle Persons
-          </button>
+        <StyledButton
+          // style={style}
+          onClick={this.togglePersonHandler}
+          alt={this.state.showPersons ? 1 : 0}>
+          Toggle Persons
+        </StyledButton>
           {/*
-              - Passing in a function to pass properties. Performance takes a hit
-                  `onClick={ () => this.switchNameHandler('MaxFunction!') }>`
-              - Using bind to pass properties. More efficient
-                  `click={this.switchNameHandler.bind(this, "MaxBind!")}`
-              */}
-
-          {persons}
-        </div>
-      </StyleRoot>
+            - Passing in a function to pass properties. Performance takes a hit
+                `onClick={ () => this.switchNameHandler('MaxFunction!') }>`
+            - Using bind to pass properties. More efficient
+                `click={this.switchNameHandler.bind(this, "MaxBind!")}`
+            */}
+        {persons}
+      </div>
   );
+
   }
 
-  deletePersonHandler = (personIndex) => {
-    console.log('deletePersonHandler');
-    const persons = [...this.state.persons];
-    persons.splice(personIndex, 1);
-    this.setState({
-      persons: persons
-    });
-  }
-
-  /*
-   * Button handler
-   */
-  togglePersonHandler = () => {
-    console.log('togglePersonHandler');
-    const doesShow = this.state.showPersons;
-    this.setState({ showPersons: !doesShow });
-  }
 }
 
-export default Radium(App);
+export default App;
