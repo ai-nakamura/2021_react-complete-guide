@@ -1,0 +1,111 @@
+import React, { Component } from 'react';
+
+import classes from './App.css';
+
+import Cockpit from '../components/Cockpit/Cockpit'
+import PersonsList from '../components/PersonsList/PersonsList'
+
+
+// CLASS based components = state management
+// FUNCTIONAL components = presentation
+// Preference is to use more functional components than class based ones
+
+class App extends Component {
+
+  constructor(props) {
+    super(props);
+    console.log('[App.js] constructor');
+    // this.state = {}
+  }
+
+  state = {
+    persons: [
+      { id: 'asdfk', name: "Max",        age: 28},
+      { id: 'sdfgh', name: "Manu",       age: 29},
+      { id: 'sdhfd', name: "Stephanie",  age: 26}
+    ],
+    otherState: "some other value",
+    showPersons: false
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    return state
+  }
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    console.log('[App.js] shouldComponentUpdate', this.props);
+    return true;
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log('[App.js] componentDidUpdate', this.props);
+  }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
+
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex( p => p.id === id );
+
+    const person = { ...this.state.persons[personIndex] }
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons]
+
+    persons[personIndex] = person;
+
+    this.setState( {persons: persons} );
+  }
+
+  deletePersonHandler = (personIndex) => {
+    const persons = [...this.state.persons];
+
+    persons.splice( personIndex, 1 );
+
+    this.setState({ persons: persons} );
+  }
+
+  togglePersonHandler = () => {
+    const doesShow = this.state.showPersons;
+
+    this.setState({ showPersons: !doesShow });
+  }
+
+  render() {
+    console.log('[App.js] render');
+    let persons = null;
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <PersonsList
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangedHandler} />
+        </div>
+      );
+
+    }
+
+
+    return (
+      <div className={classes.App}>
+
+        <Cockpit
+          title={this.props.appTitle}
+          persons={this.state.persons}
+          showPersons={this.state.showPersons}
+          clicked={this.togglePersonHandler} />
+
+        {persons}
+
+      </div>
+  );
+
+  }
+
+}
+
+
+
+export default App;
