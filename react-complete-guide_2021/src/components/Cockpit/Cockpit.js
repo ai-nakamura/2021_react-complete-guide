@@ -19,12 +19,24 @@ const cockpit = props => {
     console.log('[Cockpit.js] useEffect');
     // good place for Http request
 
-    setTimeout( () => {
-      alert('setTimeout triggered');
-    }, 100);
-  // }, [props.persons]);
+    // setTimeout( () => {
+    //   alert('setTimeout triggered');
+    // }, 1000);
+
+    // optional - return a function
+    // it runs BEFORE the main useEffect function runs,
+    // but AFTER the (first) render cycle
+    return () => {
+      console.log("[Cockpit.js] cleanup work in effect")
+    }
   }, []);
 
+  useEffect( () => {
+    console.log('[Cockpit.js] 2nd useEffect');
+    return () => {
+      console.log("[Cockpit.js] 2nd cleanup work in effect")
+    };
+  });
 
 
   const assignedClasses = []
@@ -36,10 +48,10 @@ const cockpit = props => {
   }
 
   // setting P to 'red bold'
-  if (props.persons.length <=2 ) {
+  if (props.personsLength <= 2 ) {
     assignedClasses.push(classes.red);
   }
-  if (props.persons.length <=1 ) {
+  if (props.personsLength <= 1 ) {
     assignedClasses.push(classes.bold);
   }
 

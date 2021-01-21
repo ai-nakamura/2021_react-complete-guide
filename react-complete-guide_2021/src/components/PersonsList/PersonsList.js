@@ -10,6 +10,10 @@ class PersonsList extends Component {
     return state
   }
 
+
+  // If I ever need to compare every prop for change,
+  // I can use Pure Component instead of regular Component
+  // It'll automatically all those checks
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     console.log('[PersonsList.js] shouldComponentUpdate', this.props);
     return true;
@@ -22,6 +26,10 @@ class PersonsList extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log('[PersonsList.js] componentDidUpdate', snapshot);
+  }
+
+  componentWillUnmount() {
+    console.log('[PersonsList.js] componentWillUnmount');
   }
 
   render () {

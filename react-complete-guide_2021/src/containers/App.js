@@ -25,16 +25,22 @@ class App extends Component {
       { id: 'sdhfd', name: "Stephanie",  age: 26}
     ],
     otherState: "some other value",
-    showPersons: false
+    showPersons: false,
+    showCockpit: true
   };
 
   static getDerivedStateFromProps(props, state) {
     console.log('[App.js] getDerivedStateFromProps', props);
     return state
   }
+
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     console.log('[App.js] shouldComponentUpdate', this.props);
-    return true;
+    if (nextProps.persons !== this.state) {
+      return true;
+    } else {
+      return false;
+    }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log('[App.js] componentDidUpdate', this.props);
@@ -90,12 +96,17 @@ class App extends Component {
 
     return (
       <div className={classes.App}>
+        <button
+          onClick={ () => this.setState({ showCockpit: !this.state.showCockpit})}>
+          Toggle Cockpit
+        </button>
 
-        <Cockpit
+        {this.state.showCockpit ? (<Cockpit
           title={this.props.appTitle}
-          persons={this.state.persons}
+          personsLength={this.state.persons.length}
           showPersons={this.state.showPersons}
-          clicked={this.togglePersonHandler} />
+          clicked={this.togglePersonHandler}
+        />) : null}
 
         {persons}
 
