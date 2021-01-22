@@ -1,12 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
+
+import AuthContext from '../../context/auth-context';
 
 import classes from './Cockpit.css';
 
 
 const cockpit = props => {
-  // for every render cycle of Cockpit
-  // kind of like "componentDidMount" and "componentDidUpdate" together
+
+  const toggleBtnRef = useRef(null);
+  // ** toggleBtnRef.current.click();
+  // we can't call click right away because we need to render at least once
+  // before useRef gets a reference
+
   /*
+   * Work around since we can only use static contextType in classes
+   * React Hook 'useContext'
+   */
+  const authContext = useContext(AuthContext);
+  console.log(authContext.authenticated);
+
+
+  /*
+   * for every render cycle of Cockpit
+   * kind of like "componentDidMount" and "componentDidUpdate" together
    * useEffect (func, arrVariables)
    * - runs for every render cycle of Cockpit
    * - kind of like "componentDidMount" and "componentDidUpdate" together
@@ -19,9 +35,11 @@ const cockpit = props => {
     console.log('[Cockpit.js] useEffect');
     // good place for Http request
 
-    // setTimeout( () => {
-    //   alert('setTimeout triggered');
-    // }, 1000);
+    // setTimeout( () => { alert('setTimeout triggered'); }, 1000);
+
+    // useEffect runs after the render, so by the time this code
+    // gets here useRef will have a reference!
+    toggleBtnRef.current.click();
 
     // optional - return a function
     // it runs BEFORE the main useEffect function runs,
@@ -39,21 +57,14 @@ const cockpit = props => {
   });
 
 
-  const assignedClasses = []
+  // setting button to 'red' if showPersons === true
   let btnClass = '';
+  if (props.showPersons) {btnClass = classes.Red;}
 
-  // Button
-  if (props.showPersons) {
-    btnClass = classes.Red;
-  }
-
-  // setting P to 'red bold'
-  if (props.personsLength <= 2 ) {
-    assignedClasses.push(classes.red);
-  }
-  if (props.personsLength <= 1 ) {
-    assignedClasses.push(classes.bold);
-  }
+  // setting <p> to 'red  if personsLength gets shorter
+  const assignedClasses = []
+  if (props.personsLength <= 2 ) {assignedClasses.push(classes.red);}
+  if (props.personsLength <= 1 ) {assignedClasses.push(classes.bold);}
 
 
   return (
@@ -63,12 +74,20 @@ const cockpit = props => {
       <h2>I'm a react app :3</h2>
       <p className={assignedClasses.join(' ')}>Yay this works</p>
 
-    <button
-      className={btnClass}
-      alt={props.showPersons ? 1 : 0 }
-      onClick={props.clicked}>
-      Toggle Persons
-    </button>
+      <button
+        ref={toggleBtnRef}
+        className={btnClass}
+        alt={props.showPersons ? 1 : 0 }
+        onClick={props.clicked}>
+        Toggle Persons
+      </button>
+
+      <button onClick={authContext.login}>Log in</button>
+      {/*
+      <AuthContext.Consumer>
+        {context => <button onClick={context.login}>Log in</button>}
+      </AuthContext.Consumer>
+      */}
 
     </div>
   );

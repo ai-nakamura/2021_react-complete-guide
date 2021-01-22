@@ -3,7 +3,7 @@
 //    to wrap them in an extra <div> tag
 
 // this version of an Auxilary component is also included in React as
-//    <React.Fragment> or import {Fragment} fromt 'react' <Fragment>
+//    <React.Fragment> or import {Fragment} from 'react' <Fragment>
 
 const aux = props => props.children;
 
