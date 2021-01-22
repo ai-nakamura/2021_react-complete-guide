@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import classes from './App.css';
 
-import Cockpit from '../components/Cockpit/Cockpit'
-import PersonsList from '../components/PersonsList/PersonsList'
+import Aux from '../hoc/Aux';
+import Cockpit from '../components/Cockpit/Cockpit';
+import PersonsList from '../components/PersonsList/PersonsList';
+import withClass from '../hoc/withClass';
 
 
 // CLASS based components = state management
@@ -26,7 +28,8 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: false,
-    showCockpit: true
+    showCockpit: true,
+    changeCounter: 0
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -61,7 +64,12 @@ class App extends Component {
 
     persons[personIndex] = person;
 
-    this.setState( {persons: persons} );
+    this.setState( (prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1
+      };
+    });
   }
 
   deletePersonHandler = (personIndex) => {
@@ -95,22 +103,22 @@ class App extends Component {
 
 
     return (
-      <div className={classes.App}>
+      <Aux>
         <button
           onClick={ () => this.setState({ showCockpit: !this.state.showCockpit})}>
           Toggle Cockpit
         </button>
 
-        {this.state.showCockpit ? (<Cockpit
-          title={this.props.appTitle}
-          personsLength={this.state.persons.length}
-          showPersons={this.state.showPersons}
-          clicked={this.togglePersonHandler}
-        />) : null}
-
+        {this.state.showCockpit ? (
+          <Cockpit
+            title={this.props.appTitle}
+            personsLength={this.state.persons.length}
+            showPersons={this.state.showPersons}
+            clicked={this.togglePersonHandler}
+          />
+        ) : null}
         {persons}
-
-      </div>
+      </Aux>
   );
 
   }
@@ -119,4 +127,4 @@ class App extends Component {
 
 
 
-export default App;
+export default withClass(App, classes.App);

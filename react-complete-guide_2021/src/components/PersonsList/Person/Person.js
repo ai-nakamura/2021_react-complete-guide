@@ -1,19 +1,23 @@
-import React, {Component, Fragment} from 'react';
-
+import React, {Component} from 'react';
 import classes from './Person.css';
 
+// hoc - Auxilary components to get rid of extra wrapping elements
 import Aux from '../../../hoc/Aux';
-import WithClass from '../../../hoc/withClass';
+// import {Fragment} from 'react';
+// import WithClass from '../../../hoc/WithClass';
+//    (the new 'withClass' is a different kind of hoc
+
+import withClass from '../../../hoc/withClass';
 
 class Person extends Component {
   render() {
     console.log('[Person.js] render');
     return (
-      // <div className={classes.Person}>
-      // <Aux>
       // <React.Fragment>
       // <Fragment>
-      <WithClass classes={classes.Person}>
+      // <WithClass classes={classes.Person}>
+      // <div className={classes.Person}>
+      <Aux>
         <p onClick={this.props.click}>
           I'm {this.props.name} and I am {this.props.age}!
         </p>
@@ -25,16 +29,16 @@ class Person extends Component {
           onChange={this.props.changed}
           value={this.props.name}
         />
-      </WithClass>
+      </Aux>
+      // </div>
+      // </WithClass>
       // </Fragment>
       // </React.Fragment>
-      // </Aux>
-      // </div>
     )
   }
 }
 
-export default Person;
+export default withClass(Person, classes.Person);
 
 /*
 import React from 'react';
