@@ -3,13 +3,18 @@ import React, {Component} from "react";
 import './App.css';
 
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import Layout from './components/Layout/Layout';
+import Layout from './hoc/Layout/Layout';
 
 class App extends Component {
   render () {
     return (
       <div className="App">
-        <h1 style={{fontFamily: 'Lucida Sans Unicode'}}>(☆▽☆)</h1>
+        <br/><br/><br/>
+        <h1 style={{
+          fontFamily: 'Lucida Sans Unicode',
+          textAlign: 'center'}}>
+          (☆▽☆)
+        </h1>
         <Layout>
           <BurgerBuilder />
         </Layout>
