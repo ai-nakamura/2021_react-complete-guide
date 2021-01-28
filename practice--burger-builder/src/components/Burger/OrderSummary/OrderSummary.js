@@ -1,31 +1,37 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 
-const orderSummary = props => {
+// This could be a functional component, changed it for debugging
+class OrderSummary extends Component {
 
-  const ingredientSummary = Object.keys(props.ingredients)
-    .map( igKey =>
-      <li key={igKey} style={{textAlign: 'left'}}>
-        <span style={{textTransform: 'capitalize'}}>{igKey}</span>
-        : {props.ingredients[igKey]}
-      </li>
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("[OrderSummary] didupdate")
+  }
+
+  render() {
+    const ingredientSummary = Object.keys(this.props.ingredients)
+      .map( igKey =>
+        <li key={igKey} style={{textAlign: 'left'}}>
+          <span style={{textTransform: 'capitalize'}}>{igKey}</span>
+          : {this.props.ingredients[igKey]}
+        </li>
+      );
+    return (
+      <Aux>
+        <h3>Your Order</h3>
+        <p>omnomnom has this:</p>
+        <ul>
+          {ingredientSummary}
+        </ul>
+        <p><strong>Price: ${this.props.price}</strong></p>
+        <p>checkout?</p>
+        <Button btnType="Success" clicked={this.props.purchaseContinued}>yes!</Button>
+        <Button btnType="Danger" clicked={this.props.purchaseCancelled}>not yet!</Button>
+      </Aux>
     );
+  }
+}
 
-  return (
-    <Aux>
-      <h3>Your Order</h3>
-      <p>omnomnom has this:</p>
-      <ul>
-        {ingredientSummary}
-      </ul>
-      <p><strong>Price: ${props.price}</strong></p>
-      <p>checkout?</p>
-      <Button btnType="Success" clicked={props.purchaseContinued}>yes!</Button>
-      <Button btnType="Danger" clicked={props.purchaseCancelled}>not yet!</Button>
-    </Aux>
-  );
-};
-
-export default orderSummary;
+export default OrderSummary;

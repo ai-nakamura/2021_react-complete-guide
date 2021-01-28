@@ -13,7 +13,7 @@ class App extends Component {
         <h1 style={{
           fontFamily: 'Lucida Sans Unicode',
           textAlign: 'center'}}>
-          (☆▽☆)
+          (☆▽☆) hi
         </h1>
         <Layout>
           <BurgerBuilder />
