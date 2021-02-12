@@ -21,6 +21,10 @@ class App extends Component {
     // this.state = {}
   }
 
+  componentWillMount() {
+    console.log('[App.js] componentWillMount');
+  }
+
   state = {
     persons: [
       { id: 'asdfk', name: "Max",        age: 28},
@@ -36,7 +40,7 @@ class App extends Component {
 
   static getDerivedStateFromProps(props, state) {
     console.log('[App.js] getDerivedStateFromProps', props);
-    return state
+    return state;
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -129,9 +133,9 @@ class App extends Component {
               personsLength={this.state.persons.length}
               showPersons={this.state.showPersons}
               clicked={this.togglePersonHandler}
-              />
-            ) : null}
-            {persons}
+            />
+          ) : null}
+          {persons}
         </AuthContext.Provider>
 
       </Aux>

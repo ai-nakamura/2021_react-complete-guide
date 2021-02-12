@@ -8,22 +8,71 @@ const withErrorHandler = (WrappedComponent, axios) => {
     state = {
       error: null
     }
-    componentDidMount() {
-      axios.interceptors.request.use(req => {
-        this.setState({error: null});
-        return req;
-      })
-      axios.interceptors.response.use(res => res, error => {
-        console.log(error);
-        this.setState({error: error});
-      });
+
+    /*
+     * React note:
+     * Turns out that constructor is called TWICE in React
+     * Once to see if there's any side effects, another
+     * to actually render.
+     * That's why we're not supposed to put any side effects
+     * in there!!
+     * We'll need to redo the rest of the app so everything can be
+     * in a loading state for a second so that we can get the data
+     * and load everything up properly
+     */
+    // constructor(props) { // <-- doesn't work!
+    //   super(props);
+    //   console.log('[withErrorHandler] constructor');
+
+    // render()
+
+    componentWillMount() { // <-- works!
+      console.log('[withErrorHandler] componentWillMount');
+
+    // ???
+
+    // componentDidMount() { // <-- doesn't work!
+    //   console.log('[withErrorHandler] componentDidMount');
+
+      // axios listeners --
+      // this sets up global interceptors which allows us to handle errors
+      // NOTE: THESE ARE SIDE EFFECTS!!
+      this.reqInterceptors =
+        axios
+          .interceptors.request.use(req => {
+            console.trace('interceptors/request');
+            console.log(req);
+            this.setState({error: null});
+            return req;
+          });
+      this.resInterceptors =
+        axios
+          .interceptors.response.use(res => {
+            console.log('interceptors/response');
+            return res;
+        }, error => {
+            console.log(error);
+            this.setState({error: error});
+          });
     }
 
-    errorConfirmedHandler = () => {
-      this.setState({ error: null });
+    componentWillUnmount() {
+      console.log('[withErrorHandler] componentWillUnmount');
+      // prints '0 0' since they're the index number of each list
+      console.log(this.reqInterceptors, this.resInterceptors);
+      axios.interceptors.request.eject(this.reqInterceptors);
+      axios.interceptors.response.eject(this.resInterceptors);
     }
+
+    componentDidMount() { // <-- doesn't work!
+      console.log('[withErrorHandler] componentDidMount');
+    }
+
+    errorConfirmedHandler = () =>
+      this.setState({ error: null });
 
     render() {
+      console.log(this.state.error);
       return (
         <Aux>
           <Modal
