@@ -50,24 +50,25 @@ class Posts extends Component {
     if (!this.state.error) {
 
 
-      posts = this.state.posts.map(post => {
-        return (
-          // <Link
-          //   to={'/posts/' + post.id}
-          //   key={post.id}> <Post ...> </Link>
-          <Post key={post.id}
-                title={post.title}
-                author={post.author}
-                clicked={() => this.postSelectedHandler(post.id)}/>
-        );
-      });
+      posts = this.state.posts.map(post =>
+        // <Link
+        //   to={'/posts/' + post.id}
+        //   key={post.id}> <Post ...> </Link>
+        <Post key={post.id}
+              title={post.title}
+              author={post.author}
+              clicked={() => this.postSelectedHandler(post.id)}/>
+      );
     }
     return (
       <div>
         <section className="Posts">
           {posts}
         </section>
-        <Route path={this.props.match.url + '/:id'}      exact component={FullPost} />
+        <Route
+          path={this.props.match.url + '/:id'}
+          exact
+          component={FullPost} />
       </div>
     );
   }
