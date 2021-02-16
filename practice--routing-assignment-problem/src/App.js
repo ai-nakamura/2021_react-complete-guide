@@ -21,12 +21,12 @@ class App extends Component {
           <header>
             <ul>
               <li><NavLink
-                to='/users/'
+                to='/users'
                 exact>
                 Users
               </NavLink></li>
               <li><NavLink
-                to='/courses/'
+                to='/courses'
                 exact>
                 Courses
               </NavLink></li>
@@ -35,8 +35,8 @@ class App extends Component {
 
           <Switch>
             <Route path='/users' exact component={Users}/>
-            {/*<Route path='/courses/:id/:title' component={Course}/>*/}
             <Route path='/courses' component={Courses}/>
+            {/*<Route path='/courses/:id/:title' component={Course}/>*/}
             <Redirect from='/all-courses' to='courses'/>
             <Route render={() => <p>404 not found</p>}/>
           </Switch>

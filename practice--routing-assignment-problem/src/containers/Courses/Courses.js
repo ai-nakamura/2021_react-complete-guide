@@ -26,9 +26,9 @@ class Courses extends Component {
 
     // I HATE THIS STUPID BUG WTF?!???
     let url = this.props.match.url;
-    if (!url.endsWith('/')) {
-      url += '/';
-    }
+    // if (!url.endsWith('/')) {
+    //   url += '/';
+    // }
 
     return (
       <div>
@@ -37,7 +37,7 @@ class Courses extends Component {
           {
             this.state.courses.map(course =>
               <Link
-                to={url + course.id + '/' + course.title + '/'}
+                to={url + '/' + course.id + '/' + course.title}
                 key={course.id}>
                 <article
                   className='Course'
@@ -50,7 +50,7 @@ class Courses extends Component {
         </section>
 
         <Route
-          path={url + ':id/:title'}
+          path={url + '/:id/:title'}
           component={Course}/>
 
       </div>
