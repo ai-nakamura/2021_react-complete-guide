@@ -11,6 +11,11 @@ const burger = props => {
   // It's just a different style.
   let transformedIngredients =
     Object.keys(props.ingredients).map( igKey => {
+
+      if ( igKey === 'price' ) {
+        return null;
+      }
+
       const arraySize = props.ingredients[igKey];
       return (
         [...Array(arraySize)].map( (_, i) => {
@@ -19,7 +24,6 @@ const burger = props => {
       );
     }).flat();/*reduce((arr,el) => { return arr.concat(el); }, []);*/
 
-  console.log(transformedIngredients.length);
 
   if (transformedIngredients.length === 0) {
     transformedIngredients = <p>please start adding ingredients!</p>

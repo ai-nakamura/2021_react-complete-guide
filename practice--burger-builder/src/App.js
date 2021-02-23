@@ -1,9 +1,12 @@
 import React, {Component} from "react";
-
-import './App.css';
+import { Route, Switch } from 'react-router-dom';
 
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Checkout from './containers/Checkout/Checkout';
 import Layout from './hoc/Layout/Layout';
+import Orders from './containers/Orders/Orders';
+
+import './App.css';
 
 class App extends Component {
   render () {
@@ -16,7 +19,11 @@ class App extends Component {
           (☆▽☆) hi
         </h1>
         <Layout>
-          <BurgerBuilder />
+          <Switch>
+            <Route path='/checkout' component={Checkout} />
+            <Route path='/orders' component={Orders} />
+            <Route path='/' exact component={BurgerBuilder} />
+          </Switch>
         </Layout>
       </div>
     );
