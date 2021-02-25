@@ -10,67 +10,61 @@ import classes from './ContactData.module.css';
 class ContactData extends Component {
   state = {
     orderForm: {
-      name:           null,
-      street:         null,
-      zipcode:        null,
-      country:        null,
-      email:          null,
-      deliveryMethod: null
+      name:    this.orderFormHelper('input', 'text', 'Your name'),
+      street:  this.orderFormHelper('input', 'text', 'Street'),
+      zipcode: this.orderFormHelper('input', 'text', 'ZIP Code', 5, 5),
+      country: this.orderFormHelper('input', 'text', 'Country'),
+      email:   this.orderFormHelper('input', 'email', 'Your E-Mail'),
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            {value: 'fastest', displayValue: 'Fastest'},
+            {value: 'cheapest', displayValue: 'Cheapest'}
+          ]
+        },
+        valid: true
+      }
     },
+    formIsValid: false,
     loading: false
   }
 
-  componentDidMount() {
-    this.setState({
-      orderForm: {
-        name:    this.orderFormHelper('input', 'text', 'Your name'),
-        street:  this.orderFormHelper('input', 'text', 'Street'),
-        zipcode: this.orderFormHelper('input', 'text', 'ZIP Code'),
-        country: this.orderFormHelper('input', 'text', 'Country'),
-        email:   this.orderFormHelper('input', 'email', 'Your E-Mail'),
-        deliveryMethod: {
-          elementType: 'select',
-          elementConfig: {
-            options: [
-              {value: 'fastest', displayValue: 'Fastest'},
-              {value: 'cheapest', displayValue: 'Cheapest'}
-            ]
-          }
-        }
-      }
-    });
-  }
 
-  orderFormHelper = (elementType, configType, placeholder) => {
+
+  orderFormHelper (elementType, configType, placeholder, min, max) {
     return {
       elementType: elementType,
       elementConfig: {
         type: configType,
         placeholder: placeholder
-      }
+      },
+      value: '',
+      validation: {
+        required: true,
+        minLength: min, // for zipcode
+        maxLength: max  // for zipcode
+      },
+      valid: false,
+      touched: false
     };
 }
 
   orderHandler = event => {
     // stop the page from reloading
     event.preventDefault();
-    console.log('purchaseContinueHandler');
 
     this.setState({ loading: true });
+
+    const formData = {};
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+    }
 
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
-      customer: {
-        name: 'Ai',
-        address: {
-          street: '123 fake street',
-          zipcode: '12345',
-          country: 'usa'
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethod: 'fastest'
+      orderData: formData
     };
 
     axios
@@ -86,13 +80,94 @@ class ContactData extends Component {
       });
   }
 
+  checkValidity (value, rules) {
+    let isValid = true;
+
+    if ( rules.required ) {
+      isValid = value.trim() !== '' && isValid;
+    }
+
+    // for zipcode
+    if ( rules.minLength ) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+    if ( rules.maxLength ) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+
+    return isValid;
+  }
+
+inputChangedHandler = (event, inputIdentifier) => {
+  // this makes a clone of just the top most layer
+  const updatedOrderForm = {
+    ...this.state.orderForm
+  };
+
+  // so to safely edit the inner layer we need to clone it again
+  const updatedFormElement = {
+    ...updatedOrderForm[inputIdentifier]
+  };
+
+  // and now we safely update the value
+  updatedFormElement.value = event.target.value;
+  updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+  // check element's validity
+  updatedFormElement.valid =
+    this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+
+  // form has been touched
+  updatedFormElement.touched = true;
+
+  // update form's validity
+  let formIsValid = true;
+  for ( let formIdentifier in updatedOrderForm) {
+    console.log(formIdentifier, updatedOrderForm[formIdentifier].valid)
+    formIsValid =
+      updatedOrderForm[formIdentifier].valid && formIsValid;
+
+  }
+
+  this.setState({
+    orderForm: updatedOrderForm,
+    formIsValid: formIsValid
+  });
+}
+
+
   render() {
+
+    console.log(`formIsValid? ${this.state.formIsValid}`);
+
+    const formElementsArray = [];
+    for (let key in this.state.orderForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.orderForm[key]
+      });
+    }
+
     let form = (
       <form>
-        <Input elementType='...' elementConfig='...' value='...' />
-        <Input inputtype='input' type='text' name='email'  placeholder='Your email' />
-        <Input inputtype='input' type='text' name='street' placeholder='Street' />
-        <Input inputtype='input' type='text' name='zip'    placeholder='Zip code' />
+        {formElementsArray.map( formElement =>
+          <Input
+            key={formElement.id}
+
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            value={formElement.config.value}
+            valueType={formElement.id}
+
+            changed={ event => this.inputChangedHandler(event, formElement.id)}
+          />
+        )}
         <Button btnType='Success' clicked={this.orderHandler}>Order</Button>
       </form>
     );
