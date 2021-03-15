@@ -12,13 +12,12 @@ class App extends Component {
   render () {
     return (
       <div className="App">
-        <br/><br/><br/>
-        <h1 style={{
+        <Layout>
+        <h2 style={{
           fontFamily: 'Lucida Sans Unicode',
           textAlign: 'center'}}>
           (☆▽☆) hi
-        </h1>
-        <Layout>
+        </h2>
           <Switch>
             <Route path='/checkout' component={Checkout} />
             <Route path='/orders' component={Orders} />
