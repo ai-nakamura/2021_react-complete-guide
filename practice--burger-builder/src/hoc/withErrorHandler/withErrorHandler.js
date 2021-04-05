@@ -26,7 +26,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
     // render()
 
-    componentWillMount() { // <-- works!
+    UNSAFE_componentWillMount() { // <-- works!
       console.log('[withErrorHandler] componentWillMount');
 
     // ???
@@ -40,8 +40,6 @@ const withErrorHandler = (WrappedComponent, axios) => {
       this.reqInterceptors =
         axios
           .interceptors.request.use(req => {
-            console.trace('interceptors/request');
-            console.log(req);
             this.setState({error: null});
             return req;
           });
@@ -57,22 +55,14 @@ const withErrorHandler = (WrappedComponent, axios) => {
     }
 
     componentWillUnmount() {
-      console.log('[withErrorHandler] componentWillUnmount');
-      // prints '0 0' since they're the index number of each list
-      console.log(this.reqInterceptors, this.resInterceptors);
       axios.interceptors.request.eject(this.reqInterceptors);
       axios.interceptors.response.eject(this.resInterceptors);
-    }
-
-    componentDidMount() { // <-- doesn't work!
-      console.log('[withErrorHandler] componentDidMount');
     }
 
     errorConfirmedHandler = () =>
       this.setState({ error: null });
 
     render() {
-      console.log(this.state.error);
       return (
         <Aux>
           <Modal

@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-orders';
-import { INGREDIENT_PRICES } from '../reducers/burgerBuilder';
 
 export const addIngredient = name => {
   return {
@@ -41,7 +40,6 @@ export const initIngredients = () => {
         .get('http://react-my-burger-8295f-default-rtdb.firebaseio.com/ingredients.json')
         .then(response => dispatch( setIngredients(response.data) ))
         .catch(error   => dispatch( fetchIngredientsFailed() ));
-      console.log('[BurgerBuilder] componentDidMount/postAxios')
     }, 500);
   };
 };

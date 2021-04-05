@@ -23,12 +23,12 @@ export const purchaseBurgerStart = () => {
   };
 };
 
-// asynchronous - returns the function that returns the action
-export const purchaseBurger = orderData => {
+// asynchronous - returns a dispatch that runs the function that returns the action
+export const purchaseBurger = (orderData, token) => {
   return dispatch => {
     dispatch(purchaseBurgerStart());
     axios
-      .post('/orders.json', orderData)
+      .post('/orders.json?auth=' + token, orderData)
       .then(response => {
         dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
@@ -68,24 +68,24 @@ export const fetchOrdersStart = () => {
 };
 
 // asynchronous code for fetching orders
-export const fetchOrders = () => {
+export const fetchOrders = (token, userId) => {
   return dispatch => {
   dispatch(fetchOrdersStart());
-  
-    axios
-      .get('/orders.json')
 
+    // const queryParams = '?auth=' + token;
+    const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+    axios
+      .get('/orders.json' + queryParams)
       .then( response => {
         const fetchedOrders = [];
-        for (let key in response.data) {
+        for (let item in response.data) {
           fetchedOrders.push({
-            ...response.data[key],
-            id: key
+            ...response.data[item],
+            id: item
           });
         }
         dispatch(fetchOrdersSuccess(fetchedOrders));
       })
-
       .catch( error => {
         dispatch(fetchOrdersFail(error));
       });
