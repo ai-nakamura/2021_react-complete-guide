@@ -156,8 +156,7 @@ inputChangedHandler = (event, inputIdentifier) => {
 
 
   render() {
-
-    console.log(`formIsValid? ${this.state.formIsValid}`);
+    // console.log(`formIsValid? ${this.state.formIsValid}`);
 
     const formElementsArray = [];
     for (let key in this.state.orderForm) {

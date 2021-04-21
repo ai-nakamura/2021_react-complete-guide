@@ -12,7 +12,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     // ingredients: null,
     // totalPrice: 4,
@@ -23,7 +23,12 @@ class BurgerBuilder extends Component {
   }
 
   componentDidMount() {
-    this.props.onInitIngredients();
+    if( !this.props.ings ) {
+      this.props.onInitIngredients();
+    }
+    else {
+      //go to checkout page
+    }
   }
 
   /*  componentDidMount() {
@@ -114,7 +119,7 @@ class BurgerBuilder extends Component {
  */
 
   purchaseHandler = () => {
-    console.log('[purchaseHandler]');
+    // console.log('[purchaseHandler]');
     if (this.props.isAuthenticated) {
       this.setState({ purchasing: true });
     }

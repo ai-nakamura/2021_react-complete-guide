@@ -27,29 +27,28 @@ const withErrorHandler = (WrappedComponent, axios) => {
     // render()
 
     UNSAFE_componentWillMount() { // <-- works!
-      console.log('[withErrorHandler] componentWillMount');
-
-    // ???
+      // console.log('[withErrorHandler] componentWillMount');
 
     // componentDidMount() { // <-- doesn't work!
     //   console.log('[withErrorHandler] componentDidMount');
 
       // axios listeners --
       // this sets up global interceptors which allows us to handle errors
-      // NOTE: THESE ARE SIDE EFFECTS!!
+      // NOTE: THESE ARE CALLED SIDE EFFECTS FOR REACT LIFECYCLE!!
       this.reqInterceptors =
         axios
           .interceptors.request.use(req => {
             this.setState({error: null});
             return req;
           });
+
       this.resInterceptors =
         axios
           .interceptors.response.use(res => {
-            console.log('interceptors/response');
+            // console.log('interceptors/response');
             return res;
         }, error => {
-            console.log(error);
+            // console.log(error);
             this.setState({error: error});
           });
     }

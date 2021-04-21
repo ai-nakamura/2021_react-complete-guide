@@ -66,7 +66,7 @@ export const auth = (email, password, isSignup) => {
     axios
       .post( url, authData )
       .then( response => {
-        console.log(response.data);
+        // console.log(response.data);
 
         const idToken =   response.data.idToken;
         const userId =    response.data.localId;
@@ -85,7 +85,7 @@ export const auth = (email, password, isSignup) => {
         // this will only work if this is a network error
         // if '.then' throws an error, this will crash
         // bc err.response === undefined, err.response.data === crash!!
-        console.log(err.response.data.error);
+        // console.log(err.response.data.error);
         dispatch(authFail(err.response.data.error));
       });
   };

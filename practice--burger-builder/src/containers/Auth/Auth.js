@@ -140,14 +140,17 @@ class Auth extends Component {
 
   const  errorMessage =
     this.props.error ? <p>{this.props.error.message}</p> : null;
+    console.log(this.props.error);
 
     let authRedirect = null;
     if (this.props.isAuthenticated) {
       authRedirect = <Redirect to={this.props.authRedirectPath} />;
+      console.log('hi');
     }
 
     return (
       <div className={classes.Auth}>
+        {console.log(authRedirect ? authRedirect.toString() : null)}
         {authRedirect}
         {errorMessage}
         <form onSubmit={this.submitHandler}>
@@ -169,7 +172,7 @@ const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
-    isAuthenticated: !!state.auth.loading,
+    isAuthenticated: !!state.auth.token,
     buildingBurger: state.burgerBuilder.building,
     authRedirectPath: state.auth.authRedirectPath
   }

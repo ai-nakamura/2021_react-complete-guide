@@ -32,7 +32,7 @@ class Checkout extends Component {
     }*/
 
   checkoutCancelledHandler = () => {
-    this.prop.history.goBack();
+    this.props.history.goBack();
   }
 
   checkoutContinuedHandler = () => {
@@ -40,8 +40,6 @@ class Checkout extends Component {
   }
 
   render () {
-
-    console.log('hi');
 
     let summary = <Redirect to="/" />;
     if (this.props.ings) {
