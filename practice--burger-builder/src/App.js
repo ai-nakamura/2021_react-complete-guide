@@ -48,7 +48,7 @@ class App extends Component {
         <h2 style={{
           fontFamily: 'Lucida Sans Unicode',
           textAlign: 'center'}}>
-          (☆▽☆) hi
+          (☆▽☆) hello!
         </h2>
           {routes}
           {/*<Switch>*/}

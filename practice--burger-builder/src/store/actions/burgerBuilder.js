@@ -37,7 +37,7 @@ export const initIngredients = () => {
     setTimeout( () => {
       axios
         // .get('http://react-my-burger-8295f-default-rtdb.firebaseio.com/ingredients')
-        .get('http://react-my-burger-8295f-default-rtdb.firebaseio.com/ingredients.json')
+        .get('https://react-my-burger-8295f-default-rtdb.firebaseio.com/ingredients.json')
         .then(response => dispatch( setIngredients(response.data) ))
         .catch(error   => dispatch( fetchIngredientsFailed() ));
     }, 500);

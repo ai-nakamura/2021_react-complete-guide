@@ -16,10 +16,6 @@ export const INGREDIENT_PRICES = {
   bacon: 0.7
 }
 
-
-
-
-
 const burgerBuilder = (state = initialState, action) => {
 
   switch (action.type) {
